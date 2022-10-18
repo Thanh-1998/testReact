@@ -1,0 +1,45 @@
+.policy {
+    background-color: #82B9BC;
+    margin: 40px -20px 0 -20px;
+    padding: 81px 0 79px 0;
+}
+.policy-list,
+.policy-list li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.policy-list li {
+    a {
+        display: inline-block;
+        min-width: 145px;
+        color: #fff;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: 300;
+        margin-right: 40px;
+        margin-left: 16px;
+    }
+}
+
+@media (max-width: 991px) {
+    .policy {
+        padding: 30px 0 10px 0;
+    }
+    .policy-list {
+        flex-wrap: wrap;
+    }
+    .policy-list li {
+        width: 50%;
+        margin-bottom: 30px;
+    }
+}
+@media (max-width: 480px) {
+    .policy li {
+        width: 100%;
+        & a {
+            font-size: 16px;
+            margin-right: 0;
+        }
+    }
+}

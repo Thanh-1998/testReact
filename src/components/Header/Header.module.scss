@@ -1,0 +1,107 @@
+header {
+    padding-top: 50px;
+}
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.menu_list {
+    display: flex;
+    justify-content: center;
+}
+.menu-item {
+    display: inline-block;
+    min-width: 106px;
+    font-size: 18px;
+    padding: 0 8px;
+    & a {
+        text-transform: uppercase;
+    }
+}
+.toggle {
+    display: none;
+}
+@media (max-width: 991px) {
+    .menu {
+        position: fixed;
+        width: 50vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        z-index: 999;
+        padding: 0;
+        transform: translateX(-500px);
+        transition: all .3s;
+    }
+    .menu.show {
+        transform: translateX(0);
+    }
+    .menu_list {
+        padding-top: 30px;
+        flex-direction: column;
+    }
+    .menu-item {
+        font-size: 16px;
+        padding: 7px 25px;
+    }
+    .overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, .4);
+        z-index: 9;
+        display: none;
+    }
+    .menu.show + .overlay {
+        display: block;
+    }
+    .toggle {
+        display: block;
+        width: 30px;
+        height: 25px;
+        position: absolute;
+        top: 120px;
+        left: 20px;
+        border-top: 3px solid #000;
+        border-bottom: 3px solid #000;
+        padding: 0;
+        background: 0;
+        transition: .3s;
+
+        & .bar {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #000;
+            line-height: 25px;
+        }
+    }
+    .toggle.show {
+        left: 45vw;
+        top: 20px;
+        z-index: 9999;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding-top: 40px;
+        padding-bottom: 20px;
+    }
+    .logo svg {
+        height: 45px;
+    }
+    .toggle {
+        width: 22px;
+        height: 19px;
+        top: 109px;
+    }
+    .menu {
+        width: 60vw;
+    }
+}
