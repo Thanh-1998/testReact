@@ -1,15 +1,14 @@
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
-
-import { buyProduct } from "../../../../actions/action";
-import { connect } from "react-redux";
-import styles from "../Collection/Collection.module.scss";
+import { useSelector, useDispatch } from "react-redux";
+import { cartAction } from "../../../../redux/actions";
+import styles from "../../Components/Collection/Collection.module.scss";
 
 let cx = classNames.bind(styles);
 
-function Collection(item) {
+function Collection() {
     const [items, setItems] = useState([]);
-
+    const dispatch = useDispatch();
     useEffect(() => {
         fetch(
             "https://eoffice.merapgroup.com/testeoffice/api/api/test/products"
@@ -18,9 +17,26 @@ function Collection(item) {
             .then((result) => setItems(result.data));
     }, []);
 
-    const handerBuy = (item) => {
-        buyProduct(item);
-        console.log(buyProduct(item));
+    const cart = useSelector((state) => state.cart);
+
+    const addToCart = (item) => {
+        const isAdded = cart.some((e) => {
+            return e.id === item.id;
+        });
+
+        if (!isAdded) {
+            dispatch(
+                cartAction.add({
+                    id: item.id_product,
+                    img: item.product_image,
+                    name: item.product_name,
+                    price: item.product_price,
+                    amount: 1,
+                })
+            );
+        } else {
+            alert("Sản phẩm đã tồn tại");
+        }
     };
 
     return (
@@ -140,7 +156,7 @@ function Collection(item) {
                                 </div>
 
                                 <button
-                                    onClick={handerBuy.bind(this, item)}
+                                    onClick={addToCart.bind(this, item)}
                                     className={cx("btn-buy")}
                                 >
                                     <svg
@@ -165,10 +181,4 @@ function Collection(item) {
     );
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        buyProduct: (item) => dispatch(item),
-    };
-};
-
-export default connect(mapDispatchToProps)(Collection);
+export default Collection;

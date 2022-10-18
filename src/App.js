@@ -1,36 +1,32 @@
-
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import linkRoutes from './router';
-import Topbar from './components/Topbar'
-import Header from './components/Header';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import linkRoutes from "./router";
+import Topbar from "./components/Topbar";
+import Header from "./components/Header";
 
 function App() {
-  return  <div>
-    <Topbar />
-    <Header />
+    return (
+        <div>
+            <Router>
+                <div className="App">
+                    <Topbar />
+                    <Header />
+                    <Routes>
+                        {linkRoutes.map((route, index) => {
+                            const Page = route.component;
 
-
-    <Router>
-        <div className="App">
-            <Routes>
-                {linkRoutes.map((route, index) => {
-                    const Page = route.component;
-
-                    return (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            element={<Page />}
-                        />
-                    );
-                })}
-            </Routes>
+                            return (
+                                <Route
+                                    key={index}
+                                    path={route.path}
+                                    element={<Page />}
+                                />
+                            );
+                        })}
+                    </Routes>
+                </div>
+            </Router>
         </div>
-    </Router>
-  </div>
-
-
+    );
 }
 
 export default App;
