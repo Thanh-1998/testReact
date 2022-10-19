@@ -1,43 +1,32 @@
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { cartAction } from "../../../../redux/actions";
-import styles from "../../Components/Collection/Collection.module.scss";
+import { AddCart } from '../../../../actions/action'
+import { useDispatch,connect } from "react-redux";
+
+import styles from "../Collection/Collection.module.scss";
 
 let cx = classNames.bind(styles);
 
 function Collection() {
-    const [items, setItems] = useState([]);
+
     const dispatch = useDispatch();
+ 
+    const [items, setItems] = useState([]);
+
     useEffect(() => {
         fetch(
             "https://eoffice.merapgroup.com/testeoffice/api/api/test/products"
         )
-            .then((res) => res.json())
-            .then((result) => setItems(result.data));
+        .then((res) => res.json())
+        .then((result) => setItems(result.data));
     }, []);
 
-    const cart = useSelector((state) => state.cart);
 
-    const addToCart = (item) => {
-        const isAdded = cart.some((e) => {
-            return e.id === item.id;
-        });
-
-        if (!isAdded) {
-            dispatch(
-                cartAction.add({
-                    id: item.id_product,
-                    img: item.product_image,
-                    name: item.product_name,
-                    price: item.product_price,
-                    amount: 1,
-                })
-            );
-        } else {
-            alert("Sản phẩm đã tồn tại");
-        }
-    };
+    const handerBuy = (item) => {
+    
+        dispatch(AddCart(item))
+        console.log(AddCart(item));
+    }
 
     return (
         <section className={cx("collection")}>
@@ -133,10 +122,7 @@ function Collection() {
 
                             <div className={cx("product_color")}>
                                 {colors.map((color, index) => (
-                                    <span
-                                        key={index}
-                                        style={{ backgroundColor: color.code }}
-                                    ></span>
+                                    <span key={index} style={{ backgroundColor: color.code }} ></span>
                                 ))}
                             </div>
 
@@ -156,16 +142,11 @@ function Collection() {
                                 </div>
 
                                 <button
-                                    onClick={addToCart.bind(this, item)}
+                                    onClick={handerBuy.bind(this, item)}
                                     className={cx("btn-buy")}
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="20"
-                                        height="24"
-                                        viewBox="0 0 20 24"
-                                        fill="none"
-                                    >
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="24" viewBox="0 0 20 24" fill="none" >
                                         <path
                                             d="M19.9205 22.9975L18.4601 6.73362C18.4202 6.28947 18.048 5.94926 17.6021 5.94926H14.5904V4.59096C14.5904 2.05951 12.5311 0 9.99972 0C7.46849 0 5.40933 2.05951 5.40933 4.59096V5.94926H2.39559C1.94972 5.94926 1.57746 6.28947 1.53761 6.73362L0.0714567 23.0615C0.0498635 23.3025 0.130493 23.5413 0.293705 23.7197C0.456918 23.8982 0.687666 23.9999 0.92944 23.9999H19.0684C19.0691 23.9999 19.07 23.9999 19.0707 23.9999C19.5465 23.9999 19.9321 23.6142 19.9321 23.1385C19.932 23.0906 19.9281 23.0434 19.9205 22.9975ZM7.13219 4.59096C7.13219 3.00949 8.41859 1.72286 9.99983 1.72286C11.5812 1.72286 12.8677 3.00949 12.8677 4.59096V5.94926H7.13219V4.59096ZM1.87173 22.2771L3.18317 7.67212H5.40933V9.21259C5.40933 9.68832 5.79491 10.074 6.27076 10.074C6.74662 10.074 7.13219 9.68832 7.13219 9.21259V7.67212H12.8677V9.21259C12.8677 9.68832 13.2533 10.074 13.7291 10.074C14.205 10.074 14.5906 9.68832 14.5906 9.21259V7.67212H16.8147L18.1261 22.2771H1.87173Z"
                                             fill="#201F2E"
@@ -180,5 +161,17 @@ function Collection() {
         </section>
     );
 }
+const mapStateToProps = state =>{
+    console.log(state);
+    return {
+         items: state._todoProduct,
+    };
+}
 
-export default Collection;
+function mapDispatchToProps(dispatch){
+    return{
+        AddCart:item=>dispatch(AddCart(item))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Collection);

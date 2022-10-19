@@ -1,49 +1,34 @@
 import classNames from "classnames/bind";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { cartAction } from "../../redux/actions";
+// import { useEffect, useRef, useState } from "react";
+import { connect } from "react-redux";
+import {IncreaseQuantity,DecreaseQuantity,DeleteCart} from '../../actions/action';
 import styles from "../Cart/Cart.module.scss";
 
 let cx = classNames.bind(styles);
 
-function Cart() {
-    const cart = useSelector((state) => state.cart);
-    const dispatch = useDispatch();
+function Cart({items, IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
 
-    const inc = (id) => {
-        dispatch(cartAction.inc(id));
-    };
 
-    const dec = (id) => {
-        dispatch(cartAction.dec(id));
-    };
+    const handlerChange =() => { };
 
-    const deleteItem = (id) => {
-        dispatch(cartAction.remove(id));
-    };
+    let ListCart = [];
+    let TotalCart=0;
+    Object.keys(items.Carts).forEach(function(item){
+        TotalCart+=items.Carts[item].quantity * items.Carts[item].price;
+        ListCart.push(items.Carts[item]);
+    });
 
-    const deleteAll = () => {
-        dispatch(cartAction.reset());
-    };
-
-    const hanChange = () => {};
+   
     return (
         <main className={cx("container", "main_cart")}>
             <section className={cx("main_cart-left")}>
                 <div className={cx("tab-content")}>
                     <div className={cx("heading")}>
                         <div className={cx("heading-name")}>
-                            <input
-                                type={"checkbox"}
-                                id="all"
-                                className={cx("choose-all")}
-                            ></input>
+                            <input type={"checkbox"} id="all" className={cx("choose-all")}></input>
                             <label htmlFor="all">Chọn tất cả</label>
 
-                            <span
-                                onClick={deleteAll}
-                                className={cx("heading-del")}
-                            >
+                            <span className={cx("heading-del")}>
                                 Xóa tất cả
                             </span>
                         </div>
@@ -59,37 +44,37 @@ function Cart() {
                         <div className={cx("heading-delete")}></div>
                     </div>
 
-                    {cart.map((item, index) => (
-                        <div className={cx("content")} key={index}>
+                    {ListCart.map((cart, key) => (
+                        <div className={cx("content")} key={key}>
                             <div className={cx("heading-name")}>
                                 <input type={"checkbox"}></input>
 
                                 <div className={cx("infor")}>
-                                    <img src={item.img} alt={item.name} />
+                                    <img src={cart.image} alt={cart.name} />
                                     <span className={cx("name-product")}>
-                                        {item.name}
+                                        {cart.name}
                                     </span>
                                 </div>
                             </div>
 
                             <div className={cx("heading-price", "text-bold")}>
-                                {item.price}
+                                {cart.price}
                             </div>
 
                             <div className={cx("heading-amount")}>
                                 <button
-                                    onClick={dec.bind(this, item.id)}
+                                    onClick={()=>DecreaseQuantity(key)}
                                     className={cx("amount", "minus")}
                                 >
-                                    {" "}
                                     -
                                 </button>
                                 <input
-                                    value={item.amount}
-                                    onChange={hanChange}
+                                    value={cart.quantity
+                                    }
+                                    onChange={handlerChange}
                                 ></input>
                                 <button
-                                    onClick={inc.bind(this, item.id)}
+                                    onClick={()=>IncreaseQuantity(key)}
                                     className={cx("amount", "plus")}
                                 >
                                     +
@@ -97,11 +82,11 @@ function Cart() {
                             </div>
 
                             <div className={cx("heading-total", "text-bold")}>
-                                {item.price * item.amount}
+                            {cart.price * cart.quantity}
                             </div>
 
                             <div
-                                onClick={deleteItem.bind(this, item.id)}
+                                onClick={DeleteCart}
                                 className={cx("heading-delete")}
                             >
                                 <svg
@@ -142,6 +127,7 @@ function Cart() {
                             </div>
                         </div>
                     ))}
+                    
                 </div>
             </section>
 
@@ -151,17 +137,12 @@ function Cart() {
 
                     <div className={cx("desc-order")}>
                         <span>Tạm tính</span>
-                        <span>
-                            {cart.reduce(
-                                (acc, cur) => acc + cur.price * cur.amount,
-                                0
-                            )}
-                        </span>
+                        <span>{Number(TotalCart)}</span>
                     </div>
 
                     <div className={cx("desc-order")}>
                         <span>Phí vận chuyển</span>
-                        <span>40.000đ</span>
+                        <span>{Number(TotalCart) !== 0 ? 40000 : ''}</span>
                     </div>
 
                     <div className={cx("line")}></div>
@@ -169,16 +150,8 @@ function Cart() {
                     <div className={cx("desc-order")}>
                         <span>Tổng cộng</span>
                         <span className={cx("total")}>
-                            {cart.reduce(
-                                (acc, cur) => acc + cur.price * cur.amount,
-                                0
-                            ) === 0
-                                ? 0
-                                : cart.reduce(
-                                      (acc, cur) =>
-                                          acc + cur.price * cur.amount,
-                                      0
-                                  ) + 400000}
+                            
+                        {Number(TotalCart)}
                         </span>
                     </div>
 
@@ -189,4 +162,12 @@ function Cart() {
     );
 }
 
-export default Cart;
+const mapStateToProps = state =>{
+    console.log(state)
+    return{
+        items:state._todoProduct
+    }
+}
+  
+export default connect(mapStateToProps,{IncreaseQuantity,DecreaseQuantity,DeleteCart})(Cart)
+  
