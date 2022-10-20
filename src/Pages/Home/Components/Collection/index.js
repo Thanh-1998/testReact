@@ -23,9 +23,7 @@ function Collection() {
 
 
     const handerBuy = (item) => {
-    
         dispatch(AddCart(item))
-        console.log(AddCart(item));
     }
 
     return (
@@ -47,6 +45,7 @@ function Collection() {
                     const productNew = item.product_new;
                     const productFavourite = item.product_favourite;
                     const discount = item.product_price_origin;
+                    const rate = item.rated;
 
                     return (
                         <div
@@ -112,7 +111,7 @@ function Collection() {
 
                                 <ul className={cx("rated")}>
                                     <li className={cx("rated-item")}>
-                                        {item.rated}
+                                        {rate}
                                     </li>
                                 </ul>
                             </div>
@@ -162,9 +161,8 @@ function Collection() {
     );
 }
 const mapStateToProps = state =>{
-    console.log(state);
     return {
-         items: state._todoProduct,
+         items: state.todoProduct,
     };
 }
 

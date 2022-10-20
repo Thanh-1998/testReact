@@ -4,7 +4,6 @@ import Advertisement from './Components/Advertisement';
 import Collection from './Components/Collection';
 import Policy from './Components/Policy';
 import styles from '../Home/Home.module.scss';
-import Cart from '../Cart';
 
 
 let cx = classNames.bind(styles);
@@ -16,8 +15,6 @@ function Home() {
         <Advertisement />
         <Collection />
         <Policy />
-
-        <Cart />
     </main>
 }
 

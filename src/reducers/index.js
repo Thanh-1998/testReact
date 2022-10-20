@@ -1,19 +1,15 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { GET_NUMBER_CART,ADD_CART, DECREASE_QUANTITY, INCREASE_QUANTITY, DELETE_CART } from  '../actions/action';
+import { ADD_CART, DECREASE_QUANTITY, INCREASE_QUANTITY, DELETE_CART, DELETE_ALL } from  '../actions/action';
 
 
 const initProduct = {
     numberCart:0,
     Carts:[],
-    _products:[]
+    products:[]
 }
 
-function todoProduct(state = initProduct,action){    
+function todoProduct(state = initProduct,action){
     switch(action.type){
-        case GET_NUMBER_CART:
-                return{
-                    ...state
-                }
         case ADD_CART:
             if(state.numberCart === 0){
                 let cart = {
@@ -56,7 +52,6 @@ function todoProduct(state = initProduct,action){
                    ...state
                }
             case DECREASE_QUANTITY:
-                console.log(state.id.quantity);
                 let quantity = state.Carts[action.payload].quantity;
                 
                 if(quantity>1){
@@ -77,12 +72,23 @@ function todoProduct(state = initProduct,action){
                     })
                    
                 }
+                case DELETE_ALL:
+                   // let quantity_ = state.Carts[action.payload].quantity;
+                    return{
+                        ...state,
+                        numberCart:state.numberCart - quantity_,
+                        Carts:state.Carts.filter(item=>{
+                            return item.id!==state.Carts[action.payload].id
+                        })
+                       
+                    }
         default:
             return state;
     }
 }
 
 const ShopApp = combineReducers({
-    _todoProduct:todoProduct
+    todoProduct:todoProduct
 });
+
 export default ShopApp;

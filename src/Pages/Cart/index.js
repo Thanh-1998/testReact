@@ -1,5 +1,4 @@
 import classNames from "classnames/bind";
-// import { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import {IncreaseQuantity,DecreaseQuantity,DeleteCart} from '../../actions/action';
 import styles from "../Cart/Cart.module.scss";
@@ -7,7 +6,6 @@ import styles from "../Cart/Cart.module.scss";
 let cx = classNames.bind(styles);
 
 function Cart({items, IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
-
 
     const handlerChange =() => { };
 
@@ -20,7 +18,10 @@ function Cart({items, IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
 
    
     return (
+        
         <main className={cx("container", "main_cart")}>
+            { ListCart.length ?
+            <>
             <section className={cx("main_cart-left")}>
                 <div className={cx("tab-content")}>
                     <div className={cx("heading")}>
@@ -43,7 +44,7 @@ function Cart({items, IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
                         </div>
                         <div className={cx("heading-delete")}></div>
                     </div>
-
+                   
                     {ListCart.map((cart, key) => (
                         <div className={cx("content")} key={key}>
                             <div className={cx("heading-name")}>
@@ -86,7 +87,7 @@ function Cart({items, IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
                             </div>
 
                             <div
-                                onClick={DeleteCart}
+                                onClick={()=>DeleteCart(key)}
                                 className={cx("heading-delete")}
                             >
                                 <svg
@@ -142,7 +143,7 @@ function Cart({items, IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
 
                     <div className={cx("desc-order")}>
                         <span>Phí vận chuyển</span>
-                        <span>{Number(TotalCart) !== 0 ? 40000 : ''}</span>
+                        <span>{Number(TotalCart) !== 0 ? 40000 : '--'}</span>
                     </div>
 
                     <div className={cx("line")}></div>
@@ -151,21 +152,22 @@ function Cart({items, IncreaseQuantity,DecreaseQuantity,DeleteCart}) {
                         <span>Tổng cộng</span>
                         <span className={cx("total")}>
                             
-                        {Number(TotalCart)}
+                        {Number(TotalCart) + 40000}
                         </span>
                     </div>
 
                     <button className={cx("btnBuy")}>Mua Hàng</button>
                 </div>
             </section>
+            </> : <span style={{ textAlign: "center", fontSize: 30, display: "block", width: "100%" }}> Cart empty </span> }
         </main>
+        
     );
 }
 
 const mapStateToProps = state =>{
-    console.log(state)
     return{
-        items:state._todoProduct
+        items:state.todoProduct
     }
 }
   

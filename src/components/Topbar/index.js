@@ -1,10 +1,12 @@
 import classNames from 'classnames/bind';
 import styles from '../Topbar/Topbar.module.scss';
+import { connect, useDispatch } from "react-redux"
+import { Link } from "react-router-dom";
 
 
 let cx = classNames.bind(styles);
 
-function Topbar () {
+function Topbar (Carts) {
     return <div className={(cx('topbar', 'container'))}>
         <div className={(cx('topbar-left'))} >
             Tổng đài <a href="tel: 1900 1000">1900 1000</a>
@@ -12,13 +14,13 @@ function Topbar () {
 
         <ul className={(cx('topbar_right'))} >
             <li className={(cx('topbar_right-bag'))}>
-                <a href='/cart'>
+                <Link to='/cart'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="24" viewBox="0 0 20 24" fill="none">
                         <path d="M19.9205 22.9975L18.4601 6.73362C18.4202 6.28947 18.048 5.94926 17.6021 5.94926H14.5904V4.59096C14.5904 2.05951 12.531 0 9.9997 0C7.46847 0 5.40931 2.05951 5.40931 4.59096V5.94926H2.39557C1.9497 5.94926 1.57745 6.28947 1.53759 6.73362L0.0714376 23.0615C0.0498444 23.3025 0.130474 23.5413 0.293686 23.7197C0.456898 23.8982 0.687647 23.9999 0.929421 23.9999H19.0684C19.0691 23.9999 19.07 23.9999 19.0707 23.9999C19.5465 23.9999 19.9321 23.6142 19.9321 23.1385C19.932 23.0906 19.9281 23.0434 19.9205 22.9975ZM7.13217 4.59096C7.13217 3.00949 8.41857 1.72286 9.99981 1.72286C11.5812 1.72286 12.8677 3.00949 12.8677 4.59096V5.94926H7.13217V4.59096ZM1.87171 22.2771L3.18315 7.67212H5.40931V9.21259C5.40931 9.68832 5.79489 10.074 6.27074 10.074C6.7466 10.074 7.13217 9.68832 7.13217 9.21259V7.67212H12.8677V9.21259C12.8677 9.68832 13.2533 10.074 13.7291 10.074C14.205 10.074 14.5905 9.68832 14.5905 9.21259V7.67212H16.8146L18.1261 22.2771H1.87171Z" fill="#201F2E"/>
                     </svg>
 
-                    <span className={(cx('amount-product'))}>0</span>
-                </a>
+                    <span className={(cx('amount-product'))}>{ Carts.numberCart }</span>
+                </Link>
             </li>
 
             <li className={(cx('topbar_right-heart'))}>
@@ -36,4 +38,10 @@ function Topbar () {
     </div>
 }
 
-export default Topbar
+const mapStateToProps = (state) =>{
+    return{
+        numberCart: state.todoProduct.numberCart
+    }
+}
+
+export default connect(mapStateToProps)(Topbar)
